@@ -9,8 +9,11 @@ class ContactList extends Component {
     return (
       <>
         <ul>
-          {contacts.map(contact => {
-            if (contact.name.toLowerCase().includes(filter.toLowerCase())) {
+          {contacts
+            .filter(contact => {
+              return contact.name.toLowerCase().includes(filter.toLowerCase());
+            })
+            .map(contact => {
               return (
                 <li className={s.item} key={contact.id}>
                   {contact.name}: {contact.number}{' '}
@@ -24,8 +27,7 @@ class ContactList extends Component {
                   </button>
                 </li>
               );
-            }
-          })}
+            })}
         </ul>
       </>
     );
@@ -38,4 +40,3 @@ ContactList.propTypes = {
 };
 
 export default ContactList;
-//something for github
