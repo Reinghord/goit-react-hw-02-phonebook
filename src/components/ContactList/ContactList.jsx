@@ -35,7 +35,10 @@ class ContactList extends Component {
 }
 
 ContactList.propTypes = {
-  appState: PropTypes.object.isRequired,
+  appState: PropTypes.exact({
+    contacts: PropTypes.array.isRequired,
+    filter: PropTypes.string.isRequired,
+  }).isRequired,
   onDelete: PropTypes.func.isRequired,
 };
 
