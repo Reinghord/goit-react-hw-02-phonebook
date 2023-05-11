@@ -30,9 +30,7 @@ class ContactForm extends Component {
           required
           onChange={this.onHandle}
         />
-        <label className={s.label} htmlFor="number">
-          Number
-        </label>
+        <Label htmlFor="number">Number</Label>
         <Input
           type="tel"
           name="number"
