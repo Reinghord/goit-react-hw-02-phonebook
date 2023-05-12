@@ -1,47 +1,42 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Form, Label, Input, Button } from './ContactForm.styled';
+import { Label, Button, FormStyled, FieldStyled } from './ContactForm.styled';
+import { Formik } from 'formik';
 
 class ContactForm extends Component {
-  state = { name: '', number: '' };
-
-  onHandle = e => {
-    const { name, value } = e.currentTarget;
-    this.setState({ [name]: value });
-  };
-
-  onHandleSubmit = e => {
-    e.preventDefault();
-    this.props.onSubmit(this.state.name, this.state.number);
-    this.setState({ name: '', number: '' });
+  onHandleSubmit = (values, { resetForm }) => {
+    this.props.onSubmit(values.name, values.number);
+    resetForm();
   };
 
   render() {
     return (
-      <Form onSubmit={this.onHandleSubmit}>
-        {' '}
-        <Label htmlFor="name">Name</Label>
-        <Input
-          type="text"
-          name="name"
-          value={this.state.name}
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-          onChange={this.onHandle}
-        />
-        <Label htmlFor="number">Number</Label>
-        <Input
-          type="tel"
-          name="number"
-          value={this.state.number}
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-          onChange={this.onHandle}
-        />
-        <Button type="submit">Add Contact</Button>
-      </Form>
+      <Formik
+        initialValues={{ name: '', number: '' }}
+        onSubmit={this.onHandleSubmit}
+      >
+        <FormStyled>
+          <Label htmlFor="name">Name</Label>
+          <FieldStyled
+            type="text"
+            id="name"
+            name="name"
+            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            required
+          />
+          <Label htmlFor="number">Number</Label>
+          <FieldStyled
+            type="tel"
+            id="number"
+            name="number"
+            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            required
+          />
+          <Button type="submit">Add Contact</Button>
+        </FormStyled>
+      </Formik>
     );
   }
 }
