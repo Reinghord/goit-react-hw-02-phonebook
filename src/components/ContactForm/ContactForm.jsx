@@ -1,7 +1,31 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Label, Button, FormStyled, FieldStyled } from './ContactForm.styled';
+import {
+  Label,
+  Button,
+  FormStyled,
+  FieldStyled,
+  ErrorMessageStyled,
+} from './ContactForm.styled';
 import { Formik } from 'formik';
+import * as yup from 'yup';
+
+let schema = yup.object({
+  name: yup
+    .string()
+    .required('Please enter a name')
+    .matches(
+      /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/,
+      "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+    ),
+  number: yup
+    .string()
+    .required('Please enter a number')
+    .matches(
+      /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
+      'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +'
+    ),
+});
 
 class ContactForm extends Component {
   onHandleSubmit = (values, { resetForm }) => {
@@ -13,6 +37,7 @@ class ContactForm extends Component {
     return (
       <Formik
         initialValues={{ name: '', number: '' }}
+        validationSchema={schema}
         onSubmit={this.onHandleSubmit}
       >
         <FormStyled>
@@ -21,19 +46,15 @@ class ContactForm extends Component {
             type="text"
             id="name"
             name="name"
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            required
           />
+          <ErrorMessageStyled name="name" component="div" />
           <Label htmlFor="number">Number</Label>
           <FieldStyled
             type="tel"
             id="number"
             name="number"
-            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            required
           />
+          <ErrorMessageStyled name="number" component="div" />
           <Button type="submit">Add Contact</Button>
         </FormStyled>
       </Formik>
